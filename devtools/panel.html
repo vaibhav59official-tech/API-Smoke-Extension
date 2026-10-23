@@ -1,0 +1,141 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>APISmoke - Test Suite & Report Generator</title>
+  <link rel="stylesheet" href="panel.css">
+</head>
+<body>
+  <div class="app-container">
+    <!-- Top Action Bar -->
+    <header class="toolbar">
+      <div class="toolbar-brand">
+        <span class="logo-icon">⚡</span>
+        <strong>APISmoke</strong>
+        <span class="version-tag">AI Test & Report Gen</span>
+      </div>
+
+      <div class="toolbar-controls">
+        <button id="record-btn" class="btn btn-record">
+          <span class="record-dot"></span>
+          <span id="record-text">Start Recording</span>
+        </button>
+        <button id="clear-btn" class="btn btn-secondary" title="Clear captured requests">
+          Clear
+        </button>
+        <div class="filter-group">
+          <input type="text" id="domain-filter" placeholder="Filter domain (e.g. api.domain.com)" />
+        </div>
+      </div>
+
+      <div class="toolbar-status">
+        <span class="badge" id="request-count-badge">0 calls</span>
+      </div>
+    </header>
+
+    <!-- Main Workspace Split -->
+    <main class="workspace">
+      <!-- Left: Request Stream -->
+      <section class="request-stream-panel">
+        <div class="panel-header">
+          <h3>Captured API Endpoints</h3>
+          <span class="hint">Interact with your app while recording</span>
+        </div>
+        <div class="request-table-wrapper">
+          <table class="request-table">
+            <thead>
+              <tr>
+                <th style="width: 70px;">Method</th>
+                <th style="width: 60px;">Status</th>
+                <th>URL / Path</th>
+              </tr>
+            </thead>
+            <tbody id="request-list">
+              <tr class="empty-state">
+                <td colspan="3">Click "Start Recording" and browse your web application to capture live API traffic.</td>
+              </tr>
+            </tbody>
+          </table>
+        </div>
+      </section>
+
+      <!-- Right: AI Config & Code/Report Output -->
+      <section class="generator-panel">
+        <div class="config-card">
+          <div class="panel-header">
+            <h3>Test & Report Generation Settings</h3>
+          </div>
+
+          <div class="form-row">
+            <div class="form-group">
+              <label for="framework-select">Target Framework</label>
+              <select id="framework-select">
+                <option value="playwright-ts">Playwright API (TypeScript)</option>
+                <option value="pytest-python">PyTest + HTTPX (Python)</option>
+                <option value="restassured-java">RestAssured (Java)</option>
+                <option value="postman-json">Postman Collection (JSON)</option>
+                <option value="k6-js">k6 Smoke / Perf (JS)</option>
+                <option value="html-report">Standalone UI HTML Report</option>
+              </select>
+            </div>
+
+            <div class="form-group">
+              <label for="suite-type-select">Suite Scope</label>
+              <select id="suite-type-select">
+                <option value="regression">Regression Suite (API Chaining & Contracts)</option>
+                <option value="smoke">Smoke Suite (Rapid Sanity & 200 OK)</option>
+              </select>
+            </div>
+          </div>
+
+          <div class="form-row">
+            <div class="form-group">
+              <label for="model-select">Gemini Model</label>
+              <select id="model-select">
+                <option value="gemini-3.8-flash" selected>Gemini 3.8 Flash ⚡ (Recommended)</option>
+                <option value="gemini-3.1-pro-preview">Gemini 3.1 Pro Preview</option>
+              </select>
+            </div>
+
+            <div class="form-group">
+              <label for="api-key-input">Gemini API Key (Google AI Studio)</label>
+              <input type="password" id="api-key-input" placeholder="Enter your AI Studio key for this session..." autocomplete="off" />
+            </div>
+          </div>
+
+          <p class="hint">Record only traffic you are authorized to analyze. Generating a suite sends captured samples to Google Gemini; samples may still contain sensitive information.</p>
+
+          <div class="action-footer">
+            <button id="generate-btn" class="btn btn-primary" disabled>
+              ⚡ Generate Test Suite
+            </button>
+            <button id="generate-report-btn" class="btn btn-secondary" disabled>
+              📊 Generate UI HTML Report
+            </button>
+            <span id="gen-status" class="status-indicator"></span>
+          </div>
+        </div>
+
+        <!-- Output Code & Report Area -->
+        <div class="output-container">
+          <div class="output-header">
+            <div class="output-tabs">
+              <button id="tab-code-btn" class="tab-btn active">💻 Test Code</button>
+              <button id="tab-report-btn" class="tab-btn">📊 Interactive HTML Report</button>
+            </div>
+            <div class="output-actions">
+              <button id="open-tab-btn" class="btn btn-sm btn-secondary" style="display: none;">🌐 Open in Tab</button>
+              <button id="copy-btn" class="btn btn-sm btn-secondary" disabled>📋 Copy</button>
+              <button id="download-btn" class="btn btn-sm btn-secondary" disabled>💾 Download</button>
+            </div>
+          </div>
+          <pre id="code-output" class="code-box"><code>// Intercept API traffic and click "Generate Test Suite" or "Generate UI HTML Report" to view results...</code></pre>
+          <iframe id="report-frame" class="report-frame" style="display: none; width: 100%; height: 100%; border: none; background: #0f1117;"></iframe>
+        </div>
+      </section>
+    </main>
+  </div>
+
+  <script type="module" src="panel.js"></script>
+</body>
+</html>

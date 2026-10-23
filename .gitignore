@@ -1,0 +1,29 @@
+# OS & Editor files
+.DS_Store
+Thumbs.db
+*.swp
+*.swo
+.vscode/
+.idea/
+
+# Environment Variables & Secrets
+.env
+.env.local
+*.pem
+*.key
+config.local.js
+
+# Dependencies & Build artifacts
+node_modules/
+dist/
+build/
+coverage/
+
+# Test outputs & reports
+*.log
+playwright-report/
+test-results/
+.pytest_cache/
+report.html
+api_*_report.html
+
