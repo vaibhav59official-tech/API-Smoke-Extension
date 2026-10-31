@@ -1,8 +1,8 @@
 # ⚡ APISmoke: Autonomous API Test Suite & HTML Report Generator
 
-An open-source Chrome Extension (Manifest V3) that captures API traffic you authorize, redacts common sensitive fields, analyzes **API chaining dependencies**, and uses **Google Gemini AI** to draft test suites and interactive HTML reports.
+An open-source Chrome Extension (Manifest V3) that captures API traffic you authorize, redacts common sensitive fields, analyzes **API chaining dependencies**, and uses **Kimi K3 AI** (Moonshot AI) to draft test suites and interactive HTML reports.
 
-See the [Privacy Policy](PRIVACY.md) for details about captured traffic, redaction, and data sent to Google Gemini.
+See the [Privacy Policy](PRIVACY.md) for details about captured traffic, redaction, and data sent to AI providers.
 
 ---
 
@@ -12,6 +12,7 @@ See the [Privacy Policy](PRIVACY.md) for details about captured traffic, redacti
 2. **Noise & Asset Filtering**: Filters common static assets and analytics domains to focus on API traffic.
 3. **Sensitive Field Redaction**: Replaces common credential headers and secret-like JSON fields before generation. Review captured samples before sending; redaction cannot guarantee removal of all sensitive data.
 4. **Automated API Chaining**: Identifies upstream dynamic values (such as auth tokens or resource IDs from responses) and maps them into downstream request headers, query parameters, or JSON payloads without hardcoded static IDs.
+5. **Kimi K3 Long-Context AI Engine**: Leverages Kimi's massive context window (up to 1M tokens) to handle complex, chained API workflows and dense GraphQL traffic reliably.
 
 ---
 
@@ -30,10 +31,10 @@ See the [Privacy Policy](PRIVACY.md) for details about captured traffic, redacti
 
 ## 🚀 Quickstart Guide
 
-> Record only traffic you are authorized to analyze. Captured request samples remain in the DevTools panel until cleared or closed. Generating a suite sends the captured samples and your API key to Google's Gemini API. Samples may contain sensitive information even after redaction; do not use confidential or personal data unless you are authorized to share it.
+> Record only traffic you are authorized to analyze. Captured request samples remain in the DevTools panel until cleared or closed. Generating a suite sends the captured samples and your API key to Kimi (Moonshot AI). Samples may contain sensitive information even after redaction; do not use confidential or personal data unless you are authorized to share it.
 
-### 1. Get a Google Gemini API Key
-* Visit [Google AI Studio](https://aistudio.google.com/app/apikey) to create an API key. Check Google's current pricing and usage limits.
+### 1. Get a Kimi API Key
+* Sign up at [platform.moonshot.ai](https://platform.moonshot.ai) (or [platform.moonshot.cn](https://platform.moonshot.cn)) and generate an API key (`sk-...`).
 
 ### 2. Load Extension in Google Chrome
 1. Open Chrome and navigate to `chrome://extensions`.
@@ -42,7 +43,7 @@ See the [Privacy Policy](PRIVACY.md) for details about captured traffic, redacti
    ```text
    api-smoke-generator-extension/
    ```
-4. Open the **APISmoke** panel in DevTools and enter your Gemini API key. It is used for the current panel session and is not saved.
+4. Open the **APISmoke** panel in DevTools and enter your Kimi API key. It is used for the current panel session and is not saved.
 
 ### 3. Record Live API Traffic
 1. Open your target web application (production, staging, or demo like `https://dummyjson.com`) and log in.
@@ -106,7 +107,8 @@ api-smoke-generator-extension/
     ├── chaining.js          # Detects dynamic token/ID correlation between requests
     ├── reporter.js          # Synthesizes standalone, interactive UI HTML reports
     ├── prompts.js           # Prompt engineering with API chaining rules
-    └── gemini.js            # Google AI Studio Gemini API client
+    ├── kimi.js              # Kimi (Moonshot AI) API client with retries & failover
+    └── gemini.js            # Gemini API client
 ```
 
 ---
@@ -125,4 +127,4 @@ git push -u origin main
 ```
 
 > [!NOTE]
-> The Gemini API key is entered in the DevTools panel and is not persisted by the extension. Framework, suite, and model preferences remain in local extension storage.
+> The API key is entered in the DevTools panel and is not persisted by the extension. Framework, suite, and model preferences remain in local extension storage.

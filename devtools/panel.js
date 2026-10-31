@@ -2,6 +2,7 @@
 import { isApiRequest } from '../services/filter.js';
 import { buildSanitizedRequestRecord } from '../services/sanitizer.js';
 import { buildGeminiPrompt, FRAMEWORK_INSTRUCTIONS } from '../services/prompts.js';
+import { callKimi } from '../services/kimi.js';
 import { callGemini } from '../services/gemini.js';
 import { generateHtmlReport } from '../services/reporter.js';
 
@@ -35,22 +36,23 @@ const copyBtn = document.getElementById('copy-btn');
 const downloadBtn = document.getElementById('download-btn');
 const openTabBtn = document.getElementById('open-tab-btn');
 
-// List of outdated models to auto-migrate
-const OUTDATED_MODELS = ['gemini-2.5-pro', 'gemini-2.5-flash', 'gemini-2.0-flash', 'gemini-1.5-flash', 'gemini-1.5-pro'];
+// Supported models
+const VALID_MODELS = ['kimi-k3', 'kimi-k3.1-pro', 'kimi-k3.1-pro-highspeed', 'kimi-k2.7-code', 'gemini-3.8-flash'];
 
-// Remove API keys saved by previous versions.
-chrome.storage.local.remove('geminiApiKey');
+// Clean legacy stored keys
+chrome.storage.local.remove(['geminiApiKey', 'kimiApiKey']);
 
 // 1. Initialize Settings from storage
-chrome.storage.local.get(['targetFramework', 'suiteType', 'geminiModel'], (result) => {
+chrome.storage.local.get(['targetFramework', 'suiteType', 'kimiModel', 'geminiModel'], (result) => {
   if (result.targetFramework) frameworkSelect.value = result.targetFramework;
   if (result.suiteType) suiteTypeSelect.value = result.suiteType;
-  if (result.geminiModel) {
-    const validModel = OUTDATED_MODELS.includes(result.geminiModel) ? 'gemini-3.8-flash' : result.geminiModel;
-    modelSelect.value = validModel;
-    if (validModel !== result.geminiModel) {
-      chrome.storage.local.set({ geminiModel: 'gemini-3.8-flash' });
-    }
+  
+  const savedModel = result.kimiModel || result.geminiModel;
+  if (savedModel && VALID_MODELS.includes(savedModel)) {
+    modelSelect.value = savedModel;
+  } else {
+    modelSelect.value = 'kimi-k3';
+    chrome.storage.local.set({ kimiModel: 'kimi-k3' });
   }
   updateGenerateButtonState();
 });
@@ -62,7 +64,7 @@ suiteTypeSelect.addEventListener('change', () => {
   chrome.storage.local.set({ suiteType: suiteTypeSelect.value });
 });
 modelSelect.addEventListener('change', () => {
-  chrome.storage.local.set({ geminiModel: modelSelect.value });
+  chrome.storage.local.set({ kimiModel: modelSelect.value });
 });
 
 // 2. Recording Toggle
@@ -155,11 +157,11 @@ function updateGenerateButtonState() {
 
 apiKeyInput.addEventListener('input', updateGenerateButtonState);
 
-// 5. Generate Test Suite with Gemini
+// 5. Generate Test Suite with AI (Kimi K3 / Gemini)
 generateBtn.addEventListener('click', async () => {
   const apiKey = apiKeyInput.value.trim();
   if (!apiKey) {
-    alert('Please enter your Gemini API Key first.');
+    alert('Please enter your API Key (e.g. Kimi sk-... key from platform.moonshot.ai).');
     return;
   }
   if (capturedRequests.length === 0) {
@@ -170,20 +172,30 @@ generateBtn.addEventListener('click', async () => {
   const framework = frameworkSelect.value;
   const suiteType = suiteTypeSelect.value;
   const rawModel = modelSelect.value;
-  const model = OUTDATED_MODELS.includes(rawModel) ? 'gemini-3.8-flash' : (rawModel || 'gemini-3.8-flash');
+  const model = VALID_MODELS.includes(rawModel) ? rawModel : 'kimi-k3';
 
   generateBtn.disabled = true;
   generateReportBtn.disabled = true;
   switchTab('code');
 
+  const isKimi = model.startsWith('kimi-');
+  const aiProviderName = isKimi ? 'Kimi AI' : 'Gemini';
+
   const prompt = buildGeminiPrompt(capturedRequests, framework, suiteType);
-  codeOutput.textContent = `// Prompt built (${prompt.length} chars). Sending to Gemini...`;
-  genStatus.textContent = '⚡ Contacting Gemini...';
+  codeOutput.textContent = `// Prompt built (${prompt.length} chars). Sending to ${aiProviderName} (${model})...`;
+  genStatus.textContent = `⚡ Contacting ${aiProviderName}...`;
 
   try {
-    const result = await callGemini(apiKey, prompt, model, {
-      onStatus: (msg) => { genStatus.textContent = msg; }
-    });
+    let result;
+    if (isKimi) {
+      result = await callKimi(apiKey, prompt, model, {
+        onStatus: (msg) => { genStatus.textContent = msg; }
+      });
+    } else {
+      result = await callGemini(apiKey, prompt, model, {
+        onStatus: (msg) => { genStatus.textContent = msg; }
+      });
+    }
 
     generatedCode = result;
     codeOutput.textContent = result;

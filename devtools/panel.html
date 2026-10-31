@@ -90,20 +90,22 @@
 
           <div class="form-row">
             <div class="form-group">
-              <label for="model-select">Gemini Model</label>
+              <label for="model-select">Kimi Model</label>
               <select id="model-select">
-                <option value="gemini-3.8-flash" selected>Gemini 3.8 Flash ⚡ (Recommended)</option>
-                <option value="gemini-3.1-pro-preview">Gemini 3.1 Pro Preview</option>
+                <option value="kimi-k3" selected>Kimi K3 ⚡ (1M Context — Recommended)</option>
+                <option value="kimi-k3.1-pro">Kimi K3.1 Pro 🔬 (Flagship)</option>
+                <option value="kimi-k3.1-pro-highspeed">Kimi K3.1 Pro Highspeed 🚀</option>
+                <option value="kimi-k2.7-code">Kimi K2.7 Code 💻 (Specialized Coding)</option>
               </select>
             </div>
 
             <div class="form-group">
-              <label for="api-key-input">Gemini API Key (Google AI Studio)</label>
-              <input type="password" id="api-key-input" placeholder="Enter your AI Studio key for this session..." autocomplete="off" />
+              <label for="api-key-input">Kimi API Key (Moonshot AI)</label>
+              <input type="password" id="api-key-input" placeholder="Enter your Kimi key (sk-...) for this session..." autocomplete="off" />
             </div>
           </div>
 
-          <p class="hint">Record only traffic you are authorized to analyze. Generating a suite sends captured samples to Google Gemini; samples may still contain sensitive information.</p>
+          <p class="hint">Record only traffic you are authorized to analyze. Generating a suite sends captured samples to Kimi AI (Moonshot AI); samples may still contain sensitive information.</p>
 
           <div class="action-footer">
             <button id="generate-btn" class="btn btn-primary" disabled>

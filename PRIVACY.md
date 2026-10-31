@@ -8,13 +8,13 @@ When you start recording, the extension reads network request metadata and respo
 
 Captured samples are held in the open DevTools panel's memory. They are cleared when you use Clear or close the panel. Framework, suite, and model preferences are stored in Chrome extension local storage. The API key is held in the panel while it is open and is not persisted by APISmoke.
 
-## Sharing with Google
+## Sharing with AI Providers (Kimi / Moonshot AI)
 
-When you generate a test suite, APISmoke sends the captured samples and the API key you entered to Google's Gemini API over HTTPS. Google processes that data under the terms and policies applicable to your Google account and API use. Review samples and remove sensitive traffic before generation. Generated code and reports remain in the browser unless you choose to copy, download, or otherwise share them.
+When you generate a test suite, APISmoke sends the captured samples and the API key you entered directly to the selected AI provider (Moonshot AI / Kimi or Google Gemini) over HTTPS. The provider processes that data under their applicable terms and policies. Review samples and remove sensitive traffic before generation. Generated code and reports remain in the browser unless you choose to copy, download, or otherwise share them.
 
 ## Your choices
 
-Recording is user-initiated and requires confirmation. You can stop recording at any time, clear captured samples, close the DevTools panel, or avoid generating a suite. Use APISmoke only with traffic you are authorized to inspect and share with Google.
+Recording is user-initiated and requires confirmation. You can stop recording at any time, clear captured samples, close the DevTools panel, or avoid generating a suite. Use APISmoke only with traffic you are authorized to inspect and share with the AI provider.
 
 ## Changes and contact
 

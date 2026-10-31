@@ -21,6 +21,7 @@ coverage/
 
 # Test outputs & reports
 *.log
+image.png
 playwright-report/
 test-results/
 .pytest_cache/

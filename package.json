@@ -1,18 +1,19 @@
 {
   "name": "api-smoke-generator-extension",
   "version": "1.0.0",
-  "description": "Chrome Extension that captures live network traffic from web apps and autonomously generates clean API smoke/regression test suites and visual HTML reports using Google Gemini AI.",
+  "description": "Chrome Extension that captures live network traffic from web apps and autonomously generates clean API smoke/regression test suites and visual HTML reports using Kimi K3 AI.",
   "main": "manifest.json",
   "type": "module",
   "scripts": {
-    "check": "node --check devtools/devtools.js && node --check devtools/panel.js && node --check services/chaining.js && node --check services/filter.js && node --check services/gemini.js && node --check services/prompts.js && node --check services/reporter.js && node --check services/sanitizer.js"
+    "check": "node --check devtools/devtools.js && node --check devtools/panel.js && node --check services/chaining.js && node --check services/filter.js && node --check services/kimi.js && node --check services/gemini.js && node --check services/prompts.js && node --check services/reporter.js && node --check services/sanitizer.js"
   },
   "keywords": [
     "chrome-extension",
     "api-testing",
     "test-automation",
+    "kimi-k3",
+    "moonshot-ai",
     "gemini-ai",
-    "google-ai-studio",
     "playwright",
     "pytest",
     "restassured",

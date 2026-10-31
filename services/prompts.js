@@ -1,7 +1,7 @@
-// services/prompts.js - Compact, token-efficient prompt engineering for Gemini
+// services/prompts.js - Compact, token-efficient prompt engineering for AI models
 import { analyzeApiChaining } from './chaining.js';
 
-/** Hard ceiling for the total prompt sent to Gemini (in characters). */
+/** Hard ceiling for the total prompt sent to the LLM (in characters). */
 const MAX_PROMPT_CHARS = 5000;
 
 /** Maximum unique endpoints to include in the prompt. */
@@ -159,6 +159,8 @@ export function buildGeminiPrompt(requests, frameworkKey, suiteType = 'regressio
 
   return prompt;
 }
+
+export const buildAiPrompt = buildGeminiPrompt;
 
 function assemblePrompt(fw, suiteType, chainingAnalysis, compactTraffic, endpointCount, isRawString = false) {
   const trafficBlock = isRawString ? compactTraffic : JSON.stringify(compactTraffic);

@@ -2,11 +2,13 @@
   "manifest_version": 3,
   "name": "APISmoke - Autonomous API Test Generator",
   "version": "1.0.0",
-  "description": "Capture live network traffic from web apps and automatically generate clean API smoke/regression test suites using Gemini AI.",
+  "description": "Capture live network traffic from web apps and automatically generate clean API smoke/regression test suites using Kimi K3 AI.",
   "permissions": [
     "storage"
   ],
   "host_permissions": [
+    "https://api.moonshot.ai/*",
+    "https://api.moonshot.cn/*",
     "https://generativelanguage.googleapis.com/*"
   ],
   "devtools_page": "devtools/devtools.html",
